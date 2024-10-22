@@ -2,14 +2,16 @@ import { useState } from 'react';
 import './App.css'
 
 function App() {
+  const [bulbOn,setBulbOn]=useState(true);
+
   return <div>
-   <LightBulb />
+   <Light bulbOn={bulbOn} setBulbOn={setBulbOn} />
   </div>
 }
 
-function LightBulb()
+function Light({bulbOn,setBulbOn})
 {
-  const [bulbOn,setBulbOn]=useState(true);
+  
   return <div>
     <BulbState bulbOn={bulbOn}/>
     <ToggleBulbState  bulbOn={bulbOn} setBulbOn={setBulbOn}/>
