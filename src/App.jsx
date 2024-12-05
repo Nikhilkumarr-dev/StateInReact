@@ -1,35 +1,44 @@
-import { useState } from 'react';
+import { createContext,useContext, useState } from 'react';
 import './App.css'
+
+const BulbContext=createContext();
 
 function App() {
   const [bulbOn,setBulbOn]=useState(true);
 
+  //we need to use providers to provide the context to the components
+  //even need to send the object
   return <div>
-   <Light bulbOn={bulbOn} setBulbOn={setBulbOn} />
+  <BulbContext.Provider value={{
+    bulbOn:bulbOn,
+    setBulbOn:setBulbOn
+    }}>
+    <Light />
+  </BulbContext.Provider>
   </div>
 }
 
-function Light({bulbOn,setBulbOn})
+function Light()
 {
   
   return <div>
-    <BulbState bulbOn={bulbOn}/>
-    <ToggleBulbState  bulbOn={bulbOn} setBulbOn={setBulbOn}/>
+    <LightBulb />
+    <LightSwitch />
   </div>
 }
 
-function BulbState({bulbOn})
-{
+function LightBulb(){
+  const {bulbOn} = useContext(BulbContext);
   return <div>
     {bulbOn ? "BulbOn" : "bulb off"}
   </div>
 }
 
-function ToggleBulbState({bulbOn,setBulbOn})
+function LightSwitch()
 {
+  const {bulbOn,setBulbOn}=useContext(BulbContext);
   function toggle()
   {
-    //setBulbOn(currentState=>!currentState)
    setBulbOn(!bulbOn) 
   }
   return <div>
