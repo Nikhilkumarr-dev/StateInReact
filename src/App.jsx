@@ -1,60 +1,45 @@
-import { createContext,useContext, useState } from 'react';
-import './App.css'
+import React, { createContext, useContext, useState } from 'react';
 
-const BulbContext=createContext();
+const CountContext = createContext();
 
+function CountContextProvider({ children }) {
+  const [count, setCount] = useState(0);
 
-//this is a simple provider creating a own wrapper component take children as input renderring in provider component
-function BulbProvider({children})
-{
-  const [bulbOn,setBulbOn]=useState(true);
-  
-  
-  return <BulbContext.Provider value={{
-    bulbOn:bulbOn,
-    setBulbOn:setBulbOn
-    }}>
-      {children}
-    </BulbContext.Provider>
+  return <CountContext.Provider value={{count, setCount}}>
+    {children}
+  </CountContext.Provider>
 }
 
-function App() {
-  
+function Parent() {
+  return (
+    <CountContextProvider>
+      <Incrase />
+      <Decrease />
+      <Value />
+    </CountContextProvider>
+  );
+}
 
- 
+function Decrease() {
+  const {count, setCount} = useContext(CountContext);
+  return <button onClick={() => setCount(count - 1)}>Decrease</button>;
+}
+
+function Incrase() {
+  const {count, setCount} = useContext(CountContext);
+  return <button onClick={() => setCount(count + 1)}>Increase</button>;
+}
+
+function Value() {
+  const {count} = useContext(CountContext);
+  return <p>Count: {count}</p>;
+}
+
+// App Component
+const App = () => {
   return <div>
-    <BulbProvider>
-      <Light/>
-    </BulbProvider>
+    <Parent />
   </div>
-}
+};
 
-function Light()
-{
-  
-  return <div>
-    <LightBulb />
-    <LightSwitch />
-  </div>
-}
-
-function LightBulb(){
-  const {bulbOn} = useContext(BulbContext);
-  return <div>
-    {bulbOn ? "BulbOn" : "bulb off"}
-  </div>
-}
-
-function LightSwitch()
-{
-  const {bulbOn,setBulbOn}=useContext(BulbContext);
-  function toggle()
-  {
-   setBulbOn(!bulbOn) 
-  }
-  return <div>
-    <button onClick={toggle}>Toggle the bulb</button>
-  </div>
-}
-
-export default App
+export default App;
