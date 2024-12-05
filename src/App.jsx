@@ -3,18 +3,29 @@ import './App.css'
 
 const BulbContext=createContext();
 
-function App() {
-  const [bulbOn,setBulbOn]=useState(true);
 
-  //we need to use providers to provide the context to the components
-  //even need to send the object
-  return <div>
-  <BulbContext.Provider value={{
+//this is a simple provider creating a own wrapper component take children as input renderring in provider component
+function BulbProvider({children})
+{
+  const [bulbOn,setBulbOn]=useState(true);
+  
+  
+  return <BulbContext.Provider value={{
     bulbOn:bulbOn,
     setBulbOn:setBulbOn
     }}>
-    <Light />
-  </BulbContext.Provider>
+      {children}
+    </BulbContext.Provider>
+}
+
+function App() {
+  
+
+ 
+  return <div>
+    <BulbProvider>
+      <Light/>
+    </BulbProvider>
   </div>
 }
 
